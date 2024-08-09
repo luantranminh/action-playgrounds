@@ -15,8 +15,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Download and execute exe file
         run: |
-          curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "/usr/local/bin/weather"
-          chmod +x "/usr/local/bin/weather"
+            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "/usr/local/bin/weather" && chmod a+x "/usr/local/bin/weather"
         shell: pwsh
       - name: Run weather
         run: |
