@@ -20,7 +20,11 @@ jobs:
         run: |
             curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin\weather.exe"
         shell: bash
+      - name: Set executable permissions
+        run: |
+          chmod +x "${{ runner.temp }}\bin\weather.exe"
       - name: Add to path
+        shell: bash
         run: |
           echo "${{ runner.temp }}\bin" >> $GITHUB_PATH
       - name: Run weather
