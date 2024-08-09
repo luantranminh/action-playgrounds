@@ -9,7 +9,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: "Build ${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
         - name: Checkout
           uses: actions/checkout@v4
@@ -30,7 +34,7 @@ jobs:
           shell: bash
         - name: Run Github Status
           run: |
-            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json')
+            status=$(git status --porcelain)
             if [ -n "$status" ]; then
               echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
               echo "$status"
