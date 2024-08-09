@@ -33,6 +33,7 @@ jobs:
             weather version
           shell: bash
         - name: Run Github Status
+          shell: bash
           run: |
             status=$(git status --porcelain)
             if [ -n "$status" ]; then
