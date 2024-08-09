@@ -35,7 +35,7 @@ jobs:
         - name: Run Github Status
           shell: bash
           run: |
-            status=$(git status --porcelain)
+            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json' | grep -v 'playground/action-playgrounds/bin')
             if [ -n "$status" ]; then
               echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
               echo "$status"
