@@ -13,10 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download and execute exe file
+      - name: Download exe file
         run: |
-            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "/usr/local/bin/weather" && chmod a+x "/usr/local/bin/weather"
+            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}/bin/weather"
         shell: bash
+      - name: Grant execute permission for weather
+        run: chmod +x ${{ runner.temp }}/bin/weather
       - name: Run weather
         run: |
           weather -h
