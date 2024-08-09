@@ -13,13 +13,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Create temp directory
+        run: |
+          mkdir "${{ runner.temp }}/bin"
       - name: Download exe file
         run: |
-            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin\weather"
+            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin"
         shell: bash
       - name: Add to path
         run: |
-          echo "${{ runner.temp }}/bin" >> $GITHUB_PATH
+          echo "${{ runner.temp }}\bin" >> $GITHUB_PATH
       - name: Run weather
         run: |
           weather -h
