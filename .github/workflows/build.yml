@@ -18,7 +18,7 @@ jobs:
           mkdir "${{ runner.temp }}/bin"
       - name: Download exe file
         run: |
-            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin"
+            curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin\weather.exe"
         shell: bash
       - name: Add to path
         run: |
