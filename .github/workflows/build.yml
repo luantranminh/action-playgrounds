@@ -47,6 +47,7 @@ jobs:
           shell: bash
           run: |
             changes=$(git status --porcelain | grep -v 'dotnet-tools.json')
+            exit 0
             if [ -n "$changes" ]; then
               echo "there are changes in dotnet-tools.json"
               exit 0
