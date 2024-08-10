@@ -49,8 +49,10 @@ jobs:
             changes=$(git status --porcelain | grep -v 'dotnet-tools.json')
             if [ -n "$changes" ]; then
               echo "there are changes in dotnet-tools.json"
+              exit 0
             else
               echo "no changes in dotnet-tools.json"
+              exit 0
             fi
         - name: Run Github Status
           shell: bash
