@@ -35,7 +35,7 @@ jobs:
         - name: Debug Github Status
           shell: bash
           run: |
-            git status --porcelain | grep -v 'config/dotnet-tools.json'
+            git status --porcelain | grep -v "config/dotnet-tools.json"
         - name: Debug Github Status (var)
           shell: bash
           run: |
@@ -44,7 +44,11 @@ jobs:
         - name: Run Github Status
           shell: bash
           run: |
-            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json')
+            if [ "$RUNNER_OS" == "Windows" ]; then
+              status=$(git status --porcelain | findstr /V "config/dotnet-tools.json")
+            else
+              status=$(git status --porcelain | grep -v 'config/dotnet-tools.json')
+            fi
             if [ -n "$status" ]; then
               echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
               echo "$status"
