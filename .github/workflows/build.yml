@@ -41,7 +41,7 @@ jobs:
           run: |
             git status --porcelain
         - name: Debug grep
-          shell: pwsh
+          shell: bash
           run: echo "hello" | grep "h"
         - name: Debug Github Status
           shell: pwsh
