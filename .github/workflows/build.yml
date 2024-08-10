@@ -36,7 +36,7 @@ jobs:
           shell: bash
           run: |
             if [ "$RUNNER_OS" == "Windows" ]; then
-              git status --porcelain | findstr /V 'config/dotnet-tools.json'
+              git status --porcelain | findstr /V /C:"config/dotnet-tools.json"
             else
               git status --porcelain | grep -v 'config/dotnet-tools.json'
             fi
