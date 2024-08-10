@@ -45,7 +45,13 @@ jobs:
           run: echo "hello" | grep -v "4"
         - name: Debug Github Status
           shell: bash
-          run: git status --porcelain | grep -v 'dotnet-tools.json'
+          run: |
+            changes=$(git status --porcelain | grep -v 'dotnet-tools.json')
+            if [ -n "$changes" ]; then
+              echo "there are changes in dotnet-tools.json"
+            else
+              echo "no changes in dotnet-tools.json"
+            fi
         - name: Run Github Status
           shell: bash
           run: |
