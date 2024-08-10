@@ -32,10 +32,19 @@ jobs:
           run: |
             weather version
           shell: bash
+        - name: Debug Github Status
+          shell: bash
+          run: |
+            git status --porcelain | grep -v 'config/dotnet-tools.json'
+        - name: Debug Github Status (var)
+          shell: bash
+          run: |
+            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json')
+            echo "$status"
         - name: Run Github Status
           shell: bash
           run: |
-            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json' | grep -v 'playground/action-playgrounds/bin')
+            status=$(git status --porcelain | grep -v 'config/dotnet-tools.json')
             if [ -n "$status" ]; then
               echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
               echo "$status"
