@@ -41,7 +41,7 @@ jobs:
           run: |
             git status --porcelain
         - name: Debug Github Status
-          shell: bash
+          shell: pwsh
           run: |
             if [ "$RUNNER_OS" == "Windows" ]; then
               git status --porcelain | find /V "config"
