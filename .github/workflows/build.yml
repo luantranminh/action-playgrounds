@@ -35,7 +35,7 @@ jobs:
         - name: Create config/dotnet-tools.json
           shell: bash
           run: |
-            echo '{}' > .config/dotnet-tools.json
+            echo '{}' > .config\dotnet-tools.json
         - name: Run Github Status
           shell: bash
           run: |
@@ -44,7 +44,7 @@ jobs:
           shell: bash
           run: |
             if [ "$RUNNER_OS" == "Windows" ]; then
-              git status --porcelain | findstr /V /C:"config/dotnet-tools.json"
+              git status --porcelain | findstr /V "config\dotnet-tools.json"
             else
               git status --porcelain | grep -v 'config/dotnet-tools.json'
             fi
