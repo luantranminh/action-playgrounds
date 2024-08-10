@@ -42,12 +42,12 @@ jobs:
             git status --porcelain
         - name: Debug grep
           shell: pwsh
-          run: echo "hello" | grep "h"
+          run: echo "hello" | grep -v "h"
         - name: Debug Github Status
           shell: pwsh
           run: |
             if ($env:RUNNER_OS -eq "Windows") {
-              git status --porcelain | find /v "config"
+              git status --porcelain | findstr /v "config"
             } 
         - name: Run Github Status
           shell: bash
