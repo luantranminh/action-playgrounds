@@ -40,6 +40,12 @@ jobs:
           shell: bash
           run: |
             git status --porcelain
+        - name: Debug grep
+          shell: pwsh
+          run: grep -h
+        - name: Debug grep (2)
+          shell: bash
+          run: grep -h
         - name: Debug Github Status
           shell: pwsh
           run: |
