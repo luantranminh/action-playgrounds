@@ -32,6 +32,14 @@ jobs:
           run: |
             weather version
           shell: bash
+        - name: Create config/dotnet-tools.json
+          shell: bash
+          run: |
+            echo '{}' > .config/dotnet-tools.json
+        - name: Run Github Status
+          shell: bash
+          run: |
+            git status --porcelain
         - name: Debug Github Status
           shell: bash
           run: |
