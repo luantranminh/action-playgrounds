@@ -43,6 +43,9 @@ jobs:
         - name: Debug grep
           shell: bash
           run: echo "hello" | grep -v "4"
+        - name: Debug Github Status
+          shell: bash
+          run: git status --porcelain | grep -v 'dotnet-tools.json'
         - name: Run Github Status
           shell: bash
           run: |
