@@ -43,11 +43,9 @@ jobs:
         - name: Debug Github Status
           shell: pwsh
           run: |
-            if [ "$RUNNER_OS" == "Windows" ]; then
+            if ($env:RUNNER_OS -eq "Windows") {
               git status --porcelain | find /V "config"
-            else
-              git status --porcelain | grep -v 'config'
-            fi
+            } 
         - name: Run Github Status
           shell: bash
           run: |
