@@ -43,23 +43,10 @@ jobs:
         - name: Debug grep
           shell: bash
           run: echo "hello" | grep -v "4"
-        - name: Debug Github Status
-          shell: bash
-          run: |
-            changes=$(git status --porcelain | grep -v 'dotnet-tools.json')
-            exit 0
-            if [ -n "$changes" ]; then
-              echo "there are changes in dotnet-tools.json"
-              exit 0
-            else
-              echo "no changes in dotnet-tools.json"
-              exit 0
-            fi
         - name: Run Github Status
           shell: bash
           run: |
-            status=$(git status --porcelain | grep -v 'dotnet-tools.json')
-            if [ -n "$status" ]; then
+            if git status --porcelain | grep -v 'dotnet-tools.json' ; then 
               echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
               echo "$status"
               git --no-pager diff
