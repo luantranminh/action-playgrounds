@@ -44,7 +44,7 @@ jobs:
           shell: bash
           run: |
             if [ "$RUNNER_OS" == "Windows" ]; then
-              git status --porcelain | findstr /V "config"
+              git status --porcelain | findstr config
             else
               git status --porcelain | grep -v 'config'
             fi
