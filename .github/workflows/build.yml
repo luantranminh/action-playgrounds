@@ -17,5 +17,7 @@ jobs:
     steps:
       - name: Testing this action
         uses: luantranminh/action-playgrounds@v0.0.2
+        with:
+          name: "Luan Tran Minh"
     
     

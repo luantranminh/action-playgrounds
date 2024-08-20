@@ -7,7 +7,7 @@ author: Test Author
 inputs:
   name:
     required: true
-    default: World
+    default: "World"
     description: A name to greet
 
 runs:
