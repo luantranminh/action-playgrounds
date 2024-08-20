@@ -12,46 +12,13 @@ jobs:
     name: "Build ${{ matrix.os }}"
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Create temp directory
+        - name: Check PR title
           run: |
-            mkdir "${{ runner.temp }}/bin"
-        - name: Download exe file
-          run: |
-              curl -fSL "https://github.com/genuinetools/weather/releases/download/v0.15.7/weather-windows-amd64" -o "${{ runner.temp }}\bin\weather.exe"
-          shell: bash
-        - name: Add to path
-          shell: bash
-          run: |
-            echo "${{ runner.temp }}\bin" >> $GITHUB_PATH
-        - name: Run weather
-          run: |
-            weather version
-          shell: bash
-        - name: Create config/dotnet-tools.json
-          shell: bash
-          run: |
-            echo '{}' > .config\dotnet-tools.json
-        - name: Run Github Status
-          shell: bash
-          run: |
-            git status --porcelain
-        - name: Debug grep
-          shell: bash
-          run: echo "hello" | grep -v "4"
-        - name: Run Github Status
-          shell: bash
-          run: |
-            if git status --porcelain | grep -v 'dotnet-tools.json' ; then 
-              echo "you need to run 'atlas migrate diff --env ef' and commit the changes"
-              echo "$status"
-              git --no-pager diff
+            title="${{ github.event.pull_request.title }}"
+            if [[ "$title" != *"[build]"* ]]; then
+              echo "PR title does not contain '[build]'"
               exit 1
             fi
-
-    
-          
