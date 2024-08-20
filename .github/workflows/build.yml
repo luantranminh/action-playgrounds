@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: "Build ${{ matrix.os }}"
+    name: "${{ matrix.os }}"
     strategy:
       matrix:
         os: [macos-latest]
