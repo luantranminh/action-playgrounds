@@ -1,0 +1,19 @@
+
+---
+name: Testing this action
+description: >
+  Testing this action
+author: Test Author
+inputs:
+  name:
+    required: true
+    default: World
+    description: A name to greet
+
+runs:
+  using: node20
+  main: index.js
+
+branding:
+  icon: umbrella
+  color: gray-dark
