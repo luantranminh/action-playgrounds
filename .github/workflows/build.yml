@@ -19,5 +19,6 @@ jobs:
         uses: luantranminh/action-playgrounds@v0.0.3
         with:
           name: "Luan Tran Minh"
-    
+      - name: list out all files
+        run: ls -la
     
