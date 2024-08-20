@@ -20,5 +20,5 @@ jobs:
         with:
           name: "Luan Tran Minh"
       - name: list out all files
-        run: ls -R
+        run: ls -R ${{ github.workspace }}
     
