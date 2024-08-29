@@ -5,10 +5,10 @@ on:
       - main
     paths:
       - .github/workflows/ci-atlas.yaml
-      - './*'
+      - '//*'
   pull_request:
     paths:
-      - './*'
+      - '//*'
 # Permissions to write comments on the pull request.
 permissions:
   contents: read
@@ -37,17 +37,17 @@ jobs:
           fetch-depth: 0
       - uses: ariga/setup-atlas@v0
         with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_Y1UU7N }}
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_MEBZT6 }}
       - uses: ariga/atlas-action/migrate/lint@v1
         with:
-          dir: 'file://.'
+          dir: 'file:///'
           dir-name: 'app-test'
-          dev-url: 'mysql://root:pass@localhost:3306/dev'
+          dev-url: 'mysql://root:pass@localhost:3306'
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: ariga/atlas-action/migrate/push@v1
         if: github.ref == 'refs/heads/main'
         with:
-            dir: 'file://.'
+            dir: 'file:///'
             dir-name: 'app-test'
-            dev-url: 'mysql://root:pass@localhost:3306/dev'
+            dev-url: 'mysql://root:pass@localhost:3306'
