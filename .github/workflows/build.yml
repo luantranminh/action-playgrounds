@@ -2,8 +2,7 @@ name: Download and execute exe file
 
 on:
  push:
-    branches:
-      - main
+    branches: [ main ]
  pull_request:
  workflow_dispatch:
 
