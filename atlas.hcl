@@ -3,7 +3,7 @@ env "test" {
   dev = "sqlite://file?mode=memory"
   src = glob("*.lt.hcl")
   schema {
-    src = "atlas://atlas-action"
+    src = "atlas://app-schema"
     repo {
       name = "atlas-action"
     }
