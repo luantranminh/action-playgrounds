@@ -5,7 +5,4 @@ table "t1" {
   column "c1" {
     type = integer
   }
-  column "c2" {
-    type = string
-  }
 }
