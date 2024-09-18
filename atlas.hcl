@@ -1,2 +1,13 @@
-env "GORM_MIGRATION_SOURCE" {}
-env "GORM_MIGRATION_DRIVER" {}
+env "test" {
+  url = "sqlite://local.db"
+  dev = "sqlite://file?mode=memory"
+  src = glob("*.lt.hcl")
+  schema {
+    src = "atlas://atlas-action"
+    repo {
+      name = "atlas-action"
+    }
+  }
+}
+
+env "prod" {}
