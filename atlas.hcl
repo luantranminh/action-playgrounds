@@ -5,7 +5,7 @@ env "test" {
   schema {
     src = "atlas://app-schema"
     repo {
-      name = "atlas-action"
+      name = "app-schema"
     }
   }
 }
