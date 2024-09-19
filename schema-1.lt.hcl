@@ -6,6 +6,6 @@ table "t1" {
     type = integer
   }
   column "c2" {
-    type = string
+    type = integer
   }
 }
