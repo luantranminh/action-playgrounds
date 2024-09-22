@@ -1,63 +1,40 @@
 name: Atlas
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - .github/workflows/ci-atlas.yaml
+      - 'migrations/*'
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    paths:
+      - 'migrations/*'
 # Permissions to write comments on the pull request.
 permissions:
   contents: read
   pull-requests: write
 jobs:
-  plan:
-    if: ${{ github.event_name == 'pull_request' }}
+  atlas:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ariga/setup-atlas@v0
         with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
-      - uses: ariga/atlas-action/schema/plan@master
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_8PVPLZ }}
+      - uses: ariga/atlas-action/migrate/lint@v1
         with:
-          from: env://url
-          to: atlas://app-schema
+          dir: 'file://migrations'
+          dir-name: 'admin'
           config: 'file://atlas.hcl'
           env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-  apply:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - uses: ariga/atlas-action/migrate/push@v1
+        if: github.ref == 'refs/heads/main'
         with:
-          fetch-depth: 0
-      - uses: ariga/setup-atlas@v0
-        with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
-      - uses: ariga/atlas-action/schema/push@master
-        with:
+          dir: 'file://migrations'
+          dir-name: 'admin'
           config: 'file://atlas.hcl'
           env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: ariga/atlas-action/schema/plan@master
-        id: schema-plan
-        with:
-          from: env://url
-          to: atlas://app-schema
-          config: 'file://atlas.hcl'
-          env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: ariga/atlas-action/schema/apply@master
-        if: ${{ steps.schema-plan.outputs.status == 'APPROVED' }}
-        with:
-          config: 'file://atlas.hcl'
-          env: 'test'
-          plan: ${{ steps.schema-plan.outputs.plan }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
