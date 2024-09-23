@@ -1,4 +1,5 @@
-env "test" {
+env  {
+  name = atlas.env
   url = "sqlite://local.db"
   dev = "sqlite://file?mode=memory"
   schema {
@@ -8,5 +9,3 @@ env "test" {
     }
   }
 }
-
-env "prod" {}
