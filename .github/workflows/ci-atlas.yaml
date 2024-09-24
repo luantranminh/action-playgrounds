@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - uses: ariga/setup-atlas@v0
         with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_1Q8SNP }}
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_2A9PVH }}
       - uses: ariga/atlas-action/schema/plan@master
         with:
           from: sqlite://file?mode=memory
@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 0
       - uses: ariga/setup-atlas@v0
         with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_1Q8SNP }}
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_2A9PVH }}
       - uses: ariga/atlas-action/schema/push@master
         id: schema-push
         with:
@@ -56,5 +56,6 @@ jobs:
       - uses: ariga/atlas-action/schema/apply@master
         if: ${{ steps.plan-approve.outputs.status == 'APPROVED' }}
         with:
+          url: sqlite://file?mode=memory
           dev-url: 'sqlite://dev?mode=memory'
           plan: ${{ steps.plan-approve.outputs.plan }}
