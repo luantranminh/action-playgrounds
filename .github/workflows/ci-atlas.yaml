@@ -12,52 +12,26 @@ permissions:
 jobs:
   plan:
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - uses: ariga/atlas-action/schema/plan@v1
         with:
-          fetch-depth: 0
-      - uses: ariga/setup-atlas@v0
-        with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
-      - uses: ariga/atlas-action/schema/plan@master
-        with:
-          from: env://url
-          to: atlas://app-schema
-          config: 'file://atlas.hcl'
-          env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          config: 'file://hoho/atlas.hcl'
+          env: 'sd'
   apply:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - uses: ariga/atlas-action/schema/push@v1
+        id: schema-push
         with:
-          fetch-depth: 0
-      - uses: ariga/setup-atlas@v0
+          config: 'file://hoho/atlas.hcl'
+          env: 'sd'
+      - uses: ariga/atlas-action/schema/plan/approve@v1
+        id: plan-approve
         with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
-      - uses: ariga/atlas-action/schema/push@master
+          to: ${{ steps.schema-push.outputs.url }}
+          config: 'file://hoho/atlas.hcl'
+          env: 'sd'
+      - uses: ariga/atlas-action/schema/apply@v1
+        if: ${{ steps.plan-approve.outputs.status == 'APPROVED' }}
         with:
-          config: 'file://atlas.hcl'
-          env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: ariga/atlas-action/schema/plan@master
-        id: schema-plan
-        with:
-          from: env://url
-          to: atlas://app-schema
-          config: 'file://atlas.hcl'
-          env: 'test'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: ariga/atlas-action/schema/apply@master
-        if: ${{ steps.schema-plan.outputs.status == 'APPROVED' }}
-        with:
-          config: 'file://atlas.hcl'
-          env: 'test'
-          plan: ${{ steps.schema-plan.outputs.plan }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          config: 'file://hoho/atlas.hcl'
+          env: 'sd'
+          plan: ${{ steps.plan-approve.outputs.plan }}
