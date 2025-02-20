@@ -20,6 +20,8 @@ jobs:
       - name: Create and push tag
         if: success()
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git tag -a "vscode-ext@v${{ steps.package-version.outputs.version }}" -m "Release vscode-ext@v${{ steps.package-version.outputs.version }}"
           git push origin "vscode-ext@v${{ steps.package-version.outputs.version }}"
       
