@@ -2,7 +2,7 @@ name: Release IntelliJ Plugin
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - "intellij/gradle.properties"
 
