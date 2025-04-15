@@ -31,10 +31,18 @@ jobs:
         id: check-change
         shell: bash
         run: |
-          # Get the previous version (before this push)
-          git fetch origin main~1:previous_head
-          PREVIOUS_VERSION=$(git show previous_head:intellij/gradle.properties | grep "pluginVersion" | cut -d'=' -f2 | xargs)
-          echo "Previous version: $PREVIOUS_VERSION"
+          # Get the previous commit on this branch
+          PREVIOUS_COMMIT=$(git rev-parse HEAD^)
+          
+          # Get the previous version
+          if git cat-file -e ${PREVIOUS_COMMIT}:intellij/gradle.properties 2>/dev/null; then
+            PREVIOUS_VERSION=$(git show ${PREVIOUS_COMMIT}:intellij/gradle.properties | grep "pluginVersion" | cut -d'=' -f2 | xargs)
+            echo "Previous version: $PREVIOUS_VERSION"
+          else
+            echo "Previous version file doesn't exist"
+            echo "has_changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           
           # Get current version
           CURRENT_VERSION="${{ steps.extract-version.outputs.version }}"
