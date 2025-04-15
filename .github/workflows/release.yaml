@@ -24,6 +24,7 @@ jobs:
         shell: bash
         run: |
           VERSION=$(grep "pluginVersion" intellij/gradle.properties | cut -d'=' -f2 | xargs)
+          echo "Current version from properties file: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       
       - name: Check If Version Changed
@@ -31,11 +32,14 @@ jobs:
         shell: bash
         run: |
           # Get the previous version (before this push)
-          git fetch origin master~1:previous_head
+          git fetch origin main~1:previous_head
           PREVIOUS_VERSION=$(git show previous_head:intellij/gradle.properties | grep "pluginVersion" | cut -d'=' -f2 | xargs)
+          echo "Previous version: $PREVIOUS_VERSION"
           
           # Get current version
           CURRENT_VERSION="${{ steps.extract-version.outputs.version }}"
+          
+          echo "Current version: $CURRENT_VERSION"
           
           if [[ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]]; then
             echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
