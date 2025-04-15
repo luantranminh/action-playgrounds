@@ -1,0 +1,46 @@
+name: Release IntelliJ Plugin
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "intellij/gradle.properties"
+
+jobs:
+  detect-version-change:
+    name: Detect Version Change
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+      has_changed: ${{ steps.check-change.outputs.has_changed }}
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Extract Current Version
+        id: extract-version
+        shell: bash
+        run: |
+          VERSION=$(grep "pluginVersion" intellij/gradle.properties | cut -d'=' -f2 | xargs)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Check If Version Changed
+        id: check-change
+        shell: bash
+        run: |
+          # Get the previous version (before this push)
+          git fetch origin master~1:previous_head
+          PREVIOUS_VERSION=$(git show previous_head:intellij/gradle.properties | grep "pluginVersion" | cut -d'=' -f2 | xargs)
+          
+          # Get current version
+          CURRENT_VERSION="${{ steps.extract-version.outputs.version }}"
+          
+          if [[ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]]; then
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "has_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged: $CURRENT_VERSION"
+            echo "has_changed=false" >> $GITHUB_OUTPUT
+          fi
