@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           # Get the previous version (before this push)
-          git fetch origin master~1:previous_head
+          git fetch origin main~1:previous_head
           PREVIOUS_VERSION=$(git show previous_head:intellij/gradle.properties | grep "pluginVersion" | cut -d'=' -f2 | xargs)
           
           # Get current version
