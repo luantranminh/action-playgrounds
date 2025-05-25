@@ -12,7 +12,7 @@ permissions:
 jobs:
   plan:
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
         with:
