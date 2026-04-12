@@ -1,0 +1,72 @@
+name: Test Offline Atlas Token
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-offline-grant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ariga/setup-atlas@master
+        with:
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
+
+      - name: Verify grant file exists after setup
+        shell: bash
+        run: |
+          echo "=== Checking ~/.atlas directory ==="
+          ls -la ~/.atlas/ || echo "~/.atlas does not exist"
+          echo ""
+          echo "=== Checking for grant files ==="
+          find ~/.atlas -type f 2>/dev/null || echo "No files found"
+
+      - name: Verify atlas works online
+        shell: bash
+        run: |
+          echo "=== Atlas whoami (online) ==="
+          atlas whoami || echo "whoami failed"
+          echo ""
+          echo "=== Atlas version ==="
+          atlas version
+
+      - name: Block network to api.atlasgo.cloud
+        shell: bash
+        run: |
+          echo "=== Resolving api.atlasgo.cloud ==="
+          dig +short api.atlasgo.cloud || true
+          nslookup api.atlasgo.cloud || true
+          echo ""
+          echo "=== Blocking api.atlasgo.cloud via iptables ==="
+          sudo iptables -A OUTPUT -d api.atlasgo.cloud -j DROP
+          sudo iptables -A OUTPUT -d ariga.cloud -j DROP
+          for ip in $(dig +short api.atlasgo.cloud); do
+            echo "Blocking IP: $ip"
+            sudo iptables -A OUTPUT -d "$ip" -j DROP
+          done
+          echo ""
+          echo "=== Verify block is in place ==="
+          sudo iptables -L OUTPUT -n
+          echo ""
+          echo "=== Test that network is blocked (should timeout/fail) ==="
+          timeout 5 curl -v https://api.atlasgo.cloud 2>&1 || echo "Connection blocked as expected"
+
+      - name: Test grant-only login offline
+        shell: bash
+        run: |
+          echo "=== Attempting atlas login --grant-only while offline ==="
+          atlas login --token ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }} --grant-only
+          echo "EXIT CODE: $?"
+          echo ""
+          echo "=== Verify atlas still works offline ==="
+          atlas whoami || echo "whoami failed offline (may be expected)"
+
+      - name: Cleanup iptables
+        if: always()
+        shell: bash
+        run: |
+          sudo iptables -F OUTPUT
+          echo "iptables rules flushed"
