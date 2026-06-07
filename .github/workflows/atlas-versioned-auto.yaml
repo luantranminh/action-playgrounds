@@ -42,12 +42,12 @@ jobs:
       - name: Generate migration diff
         uses: ariga/atlas-action/migrate/diff@v1
         with:
-          dir: file://migrations
-          to: file://schema-1.lt.hcl
+          dir: file://.github/atlas-auto/migrations
+          to: file://.github/atlas-auto/schema.lt.hcl
           dev-url: docker://postgres/16/dev?search_path=public
 
       - name: Apply migrations
         uses: ariga/atlas-action/migrate/apply@v1
         with:
-          dir: file://migrations
-          url: postgres://postgres:pass@postgres:5432/app?sslmode=disable&search_path=public
+          dir: file://.github/atlas-auto/migrations
+          url: postgres://postgres:pass@localhost:5432/app?sslmode=disable&search_path=public

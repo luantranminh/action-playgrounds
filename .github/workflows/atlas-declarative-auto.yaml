@@ -35,18 +35,18 @@ jobs:
           cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
 
       - name: Inspect current schema
-        run: atlas schema inspect --config file://atlas.hcl --env test
+        run: atlas schema inspect --config file://.github/atlas-auto/atlas.hcl --env test
 
       - name: Diff current and desired schema
-        run: atlas schema diff --config file://atlas.hcl --env test --from env://url --to file://schema-1.lt.hcl
+        run: atlas schema diff --config file://.github/atlas-auto/atlas.hcl --env test --from env://url --to file://.github/atlas-auto/schema.lt.hcl
 
       - name: Plan schema changes
         id: plan
         uses: ariga/atlas-action/schema/plan@v1
         with:
           from: env://url
-          to: file://schema-1.lt.hcl
-          config: file://atlas.hcl
+          to: file://.github/atlas-auto/schema.lt.hcl
+          config: file://.github/atlas-auto/atlas.hcl
           env: test
 
       - name: Approve schema plan
@@ -54,12 +54,12 @@ jobs:
         uses: ariga/atlas-action/schema/plan/approve@v1
         with:
           plan: ${{ steps.plan.outputs.plan }}
-          config: file://atlas.hcl
+          config: file://.github/atlas-auto/atlas.hcl
           env: test
 
       - name: Apply approved schema plan
         uses: ariga/atlas-action/schema/apply@v1
         with:
           plan: ${{ steps.approve.outputs.plan }}
-          config: file://atlas.hcl
+          config: file://.github/atlas-auto/atlas.hcl
           env: test
