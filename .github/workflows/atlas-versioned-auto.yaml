@@ -1,0 +1,53 @@
+name: Atlas Versioned Auto
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: app
+          POSTGRES_PASSWORD: pass
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d app"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ariga/setup-atlas@v0
+        with:
+          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN_PW7QHH }}
+
+      - name: Configure git identity
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Generate migration diff
+        uses: ariga/atlas-action/migrate/diff@v1
+        with:
+          dir: file://migrations
+          to: file://schema-1.lt.hcl
+          dev-url: docker://postgres/16/dev?search_path=public
+
+      - name: Apply migrations
+        uses: ariga/atlas-action/migrate/apply@v1
+        with:
+          dir: file://migrations
+          url: postgres://postgres:pass@postgres:5432/app?sslmode=disable&search_path=public

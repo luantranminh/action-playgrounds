@@ -1,6 +1,6 @@
 env "test" {
-  url = "sqlite://local.db"
-  dev = "clickhouse://root:pass@localhost:9000/test3"
+  url = "postgres://postgres:pass@postgres:5432/app?sslmode=disable&search_path=public"
+  dev = "docker://postgres/16/dev?search_path=public"
   schema {
     src = "file://schema-1.lt.hcl"
     repo {
