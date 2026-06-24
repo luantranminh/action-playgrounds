@@ -6,3 +6,5 @@ resource "aws_instance" "example" {
   }
   
 }
+
+# Okay, let's run terraform plan
